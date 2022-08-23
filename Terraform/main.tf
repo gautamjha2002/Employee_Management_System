@@ -6,7 +6,19 @@ resource "aws_instance" "jenkins" {
   instance_type = "t2.micro"
   key_name = "jenkins"
   security_groups = [aws_security_group.jenkins_sg.name]
+  tags = {
+    Name = "Jenkins"
+  }
 }
+
+resource "aws_instance" "Ansible-admin" {
+  ami = "ami-076e3a557efe1aa9c" // Amazon machine
+  instance_type = "t2.micro"
+  tags = {
+    Name = "Ansible_Admin"
+  }
+}
+
 
 resource "aws_security_group" "jenkins_sg" {
   name = "jenkins_sg"
