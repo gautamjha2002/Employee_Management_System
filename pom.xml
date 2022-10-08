@@ -53,6 +53,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<finalName>myapp-spring-mysql</finalName>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

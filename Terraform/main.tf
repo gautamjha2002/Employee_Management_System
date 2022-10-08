@@ -3,7 +3,7 @@ provider "aws" {
 }
 resource "aws_instance" "jenkins" {
   ami = "ami-0e6837d3d816a2ac6" // centos 8 machine ami
-  instance_type = "t2.micro"
+  instance_type = "t2.2xlarge"
   key_name = "jenkins"
   security_groups = [aws_security_group.jenkins_sg.name]
   tags = {
@@ -11,13 +11,13 @@ resource "aws_instance" "jenkins" {
   }
 }
 
-resource "aws_instance" "Ansible-admin" {
-  ami = "ami-076e3a557efe1aa9c" // Amazon machine
-  instance_type = "t2.micro"
-  tags = {
-    Name = "Ansible_Admin"
-  }
-}
+#resource "aws_instance" "Ansible-admin" {
+#  ami = "ami-076e3a557efe1aa9c" // Amazon machine
+#  instance_type = "t2.micro"
+#  tags = {
+#    Name = "Ansible_Admin"
+#  }
+#}
 
 
 resource "aws_security_group" "jenkins_sg" {
