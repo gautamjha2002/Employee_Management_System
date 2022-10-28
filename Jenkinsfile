@@ -11,6 +11,16 @@ steps{
 sh 'mvn install -Dmaven.test.skip=true '
 }
 }
+stage ('CODE ANALYSIS WITH CHECKSTYLE'){
+            steps{
+                sh 'mvn checkstyle:checkstyle'
+            }
+            post{
+                success{
+                    echo 'Analysis Result Generated'
+                }
+            }
+        }
 }
 }
 
