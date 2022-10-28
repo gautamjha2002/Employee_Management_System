@@ -9,7 +9,7 @@ pipeline{
 agent any
 environment{
         DOCKER_USER = 'gautamjha3112002'
-        JOB_NAMES = $JOB_NAME.toLowerCase
+        JOB_NAMES = JOB_NAME.toLowerCase
 
     }
 stages{
