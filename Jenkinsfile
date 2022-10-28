@@ -35,7 +35,7 @@ stage ('CODE ANALYSIS WITH CHECKSTYLE'){
         }
 stage('Building Docker Image'){
             steps{
-                sh 'docker build -t ${DOCKER_USER}/${JOB_NAME}:0.${BUILD_ID} .'
+                sh 'sudo docker build -t ${DOCKER_USER}/${JOB_NAME}:0.${BUILD_ID} .'
             }
         }
         stage('Push to DockerHub'){
@@ -44,8 +44,8 @@ stage('Building Docker Image'){
                     input message: 'Approve Push to docker Hub'
                 }
                 withCredentials([string(credentialsId: 'dockerlogin', variable: 'dockerlogin')]) {
-                   sh 'docker login -u gautamjha3112002 -p ${dockerlogin}'
-                   sh 'docker push ${DOCKER_USER}/${JOB_NAME}:0.${BUILD_ID}'
+                   sh 'sudo docker login -u gautamjha3112002 -p ${dockerlogin}'
+                   sh 'sudo docker push ${DOCKER_USER}/${JOB_NAME}:0.${BUILD_ID}'
                 }
             }
         }
