@@ -1,7 +1,5 @@
 pipeline{
 agent any
-
-}
 stages{
 stage ('Fetch code'){
 steps{
@@ -14,3 +12,5 @@ sh 'mvn install -Dmaven.test.skip=true '
 }
 }
 }
+}
+
