@@ -1,9 +1,9 @@
 provider "aws" {
-  region = "ap-south-1"
+  region = "ap-southeast-1"
 }
 resource "aws_instance" "jenkins" {
-  ami = "ami-0e6837d3d816a2ac6" // centos 8 machine ami
-  instance_type = "t2.2xlarge"
+  ami = "ami-02d2161b98d1750a9" // centos 8 machine ami
+  instance_type = "a1.xlarge"
   key_name = "jenkins"
   security_groups = [aws_security_group.jenkins_sg.name]
   tags = {
