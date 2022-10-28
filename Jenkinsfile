@@ -9,7 +9,7 @@ pipeline{
 agent any
 environment{
         DOCKER_USER = 'gautamjha3112002'
-        JOB_NAMES = params.JOB_NAME.trim().toLowerCase()
+        //JOB_NAMES = params.JOB_NAME.trim().toLowerCase()
 
     }
 stages{
@@ -35,7 +35,7 @@ stage ('CODE ANALYSIS WITH CHECKSTYLE'){
         }
 stage('Building Docker Image'){
             steps{
-                sh 'docker build -t ${DOCKER_USER}/${JOB_NAMES}:0.${BUILD_ID} .'
+                sh 'docker build -t ${DOCKER_USER}/${JOB_NAME}:0.${BUILD_ID} .'
             }
         }
         stage('Push to DockerHub'){
