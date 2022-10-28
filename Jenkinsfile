@@ -50,5 +50,5 @@ stage('Building Docker Image'){
         }
     }
 }
-}
+
 
