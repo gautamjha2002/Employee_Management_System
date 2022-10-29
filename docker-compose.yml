@@ -4,7 +4,7 @@ services:
 
   app:
     container_name: my-app
-    image: my-app-img
+    image: gautamjha3112002/implementing_devops_test
     build: .
     ports:
       - 8080:8080
