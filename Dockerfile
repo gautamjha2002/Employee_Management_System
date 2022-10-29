@@ -1,4 +1,4 @@
-FROM openjdk:8
+FROM openjdk:20-oracle
 WORKDIR /app
 ADD target/myapp-spring-mysql.jar myapp-spring-mysql.jar
 EXPOSE 8080
