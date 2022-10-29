@@ -7,6 +7,9 @@ def COLOR_MAP = [
 
 pipeline{
 agent any
+tools {
+        maven "MAVEN"
+}
 environment{
         DOCKER_USER = 'gautamjha3112002'
         //JOB_NAMES = params.JOB_NAME.trim().toLowerCase()
