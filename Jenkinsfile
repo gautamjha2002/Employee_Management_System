@@ -3,30 +3,26 @@ def COLOR_MAP = [
     'FAILURE': 'danger',
 ]
 
-
-
 pipeline{
-agent any
-tools {
+    agent any
+    tools{
         maven "MAVEN"
-}
-environment{
-        DOCKER_USER = 'gautamjha3112002'
-        //JOB_NAMES = params.JOB_NAME.trim().toLowerCase()
-
     }
-stages{
-stage ('Fetch code'){
-steps{
-git branch: 'master', url: 'https://github.com/gautamjha2002/Employee_Management_System.git'
-}
-}
-stage('Build'){
-steps{
-sh 'mvn install -Dmaven.test.skip=true '
-}
-}
-stage ('CODE ANALYSIS WITH CHECKSTYLE'){
+    environment{
+        DOCKER_USER = 'gautamjha3112002'
+    }
+    stages{
+        stage('Fetch code'){
+            steps{
+                git branch: 'master', url: 'https://github.com/gautamjha2002/Employee_Management_System.git'
+            }
+        }
+        stage('Build'){
+            steps{
+                sh 'mvn install -Dmaven.test.skip=true'
+            }
+        }
+        stage ('CODE ANALYSIS WITH CHECKSTYLE'){
             steps{
                 sh 'mvn checkstyle:checkstyle'
             }
@@ -36,11 +32,12 @@ stage ('CODE ANALYSIS WITH CHECKSTYLE'){
                 }
             }
         }
-stage('Building Docker Image'){
+        stage('Building Docker Image'){
             steps{
                 sh 'sudo docker build -t ${DOCKER_USER}/${JOB_NAME}:0.${BUILD_ID} .'
             }
         }
+
         stage('Push to DockerHub'){
             steps{
                 timeout(time:5, unit:'DAYS'){
