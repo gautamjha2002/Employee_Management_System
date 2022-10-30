@@ -2,26 +2,17 @@ provider "aws" {
   region = "ap-southeast-1"
 }
 resource "aws_instance" "jenkins" {
-  ami = "ami-02d2161b98d1750a9" // centos 8 machine ami
-  instance_type = "a1.xlarge"
-  key_name = "jenkins"
-  security_groups = [aws_security_group.jenkins_sg.name]
+  ami = "ami-07651f0c4c315a529" // Ubuntu Machine
+  instance_type = "t2.large"
+  key_name = "implementing_devops" // key name (pem file)
+  security_groups = [aws_security_group.project_sg.name]
   tags = {
-    Name = "Jenkins"
+    Name = "Project Infrastructure"
   }
 }
 
-#resource "aws_instance" "Ansible-admin" {
-#  ami = "ami-076e3a557efe1aa9c" // Amazon machine
-#  instance_type = "t2.micro"
-#  tags = {
-#    Name = "Ansible_Admin"
-#  }
-#}
-
-
-resource "aws_security_group" "jenkins_sg" {
-  name = "jenkins_sg"
+resource "aws_security_group" "project_sg" {
+  name = "project_sg"
 
   // opening port 8080 to access jenkins server
   ingress {
@@ -39,6 +30,17 @@ resource "aws_security_group" "jenkins_sg" {
     cidr_blocks = ["0.0.0.0/0"]
 
   }
+
+  // opening port 8081 for App redirection
+  ingress {
+    from_port = 8081
+    protocol  = "TCP"
+    to_port   = 8081
+    cidr_blocks = ["0.0.0.0/0"]
+
+  }
+
+  // all port open to send the request out
   egress {
     from_port = 0
     to_port = 0

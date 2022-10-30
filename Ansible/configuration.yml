@@ -1,0 +1,95 @@
+---
+ - name: Configyre the Infrastructure
+   hosts: devops
+   gather_facts: false
+   become: yes
+   tasks:
+   # Updating repos 
+    - name: update the repos
+      apt:
+        name: "*"
+        state: latest
+    # Installing Docker
+    - name: Remove older docker version
+      apt:
+        name:
+          - docker
+          - docker-engine
+          - docker.io
+          - containerd
+          - runc
+        state: absent
+    - name: Update the packages
+      shell: "apt-get update -y"
+    - name: install required packages
+      apt:
+        name:
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
+        state: present
+    - name: Creating keyrings for docker directory
+      file:
+        path: /etc/apt/keyrings
+        state: directory
+    # - name: Adding Docker official GPG key
+    #   ignore_errors: True
+    #   shell: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg"
+    - name: Setting up the Docker repository
+      shell: "echo \"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null"
+    - name: Update the apt packages
+      shell: "apt-get update -y"
+    - name: Install Docker Engine, containerd, and Docker Compose
+      apt:
+        name:
+          - docker-ce 
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose-plugin
+        state: present
+    # install jenkins
+    - name: Install JAVA 11
+      apt:
+        name: openjdk-11-jre
+        state: present
+    - name: Add jenkins official key 
+      shell: "curl -fsSL https://pkg.jenkins.io/debian/jenkins.io.key | sudo tee /usr/share/keyrings/jenkins-keyring.asc > /dev/null"
+    - name: Setting up jenkins
+      shell: "echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null"
+    - name: Updating the packages
+      shell: "apt-get update -y"
+    - name: Install jenkins
+      apt:
+        name: jenkins
+        state: present
+    - name: Start Jenkins if not started
+      service:
+        name: jenkins
+        state: started
+    - name: Add Jenkins in suders file
+      template:
+        src: ./sudoers.j2
+        dest: /etc/sudoers
+    # install kubectl
+    - name: Downloading kubectl binary
+      shell: "curl -LO \"https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\""
+    - name: Downloding kubectl checksum file
+      shell: "curl -LO \"https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256\""
+    - name: Validating the kubectl binary against the checksum file
+      shell: "echo \"$(cat kubectl.sha256)  kubectl\" | sha256sum --check"
+      register: command_output
+    - debug: 
+        var: command_output.stdout_lines
+    - name: Install kubectl
+      shell: "sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl"
+    - name: Ensure version is up-to-date
+      shell: "kubectl version --client --output=yaml"
+      register: kubectl_yml_version
+    - debug:
+        var: kubectl_yml_version.stdout_lines
+    # install minikube
+    - name : Downloading Minikube package
+      shell: "curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb"
+    - name: Installing Minikube
+      shell: "dpkg -i minikube_latest_amd64.deb"
