@@ -1,5 +1,5 @@
 ---
- - name: Configyre the Infrastructure
+ - name: Configure the Infrastructure
    hosts: devops
    gather_facts: false
    become: yes
