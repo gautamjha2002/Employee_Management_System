@@ -31,15 +31,6 @@ resource "aws_security_group" "project_sg" {
 
   }
 
-  // opening port 8081 for App redirection
-  ingress {
-    from_port = 8081
-    protocol  = "TCP"
-    to_port   = 8081
-    cidr_blocks = ["0.0.0.0/0"]
-
-  }
-
   // all port open to send the request out
   egress {
     from_port = 0

@@ -33,9 +33,9 @@
       file:
         path: /etc/apt/keyrings
         state: directory
-    # - name: Adding Docker official GPG key
-    #   ignore_errors: True
-    #   shell: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg"
+    - name: Adding Docker official GPG key
+      ignore_errors: True
+      shell: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg"
     - name: Setting up the Docker repository
       shell: "echo \"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null"
     - name: Update the apt packages
@@ -71,25 +71,3 @@
       template:
         src: ./sudoers.j2
         dest: /etc/sudoers
-    # install kubectl
-    - name: Downloading kubectl binary
-      shell: "curl -LO \"https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\""
-    - name: Downloding kubectl checksum file
-      shell: "curl -LO \"https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256\""
-    - name: Validating the kubectl binary against the checksum file
-      shell: "echo \"$(cat kubectl.sha256)  kubectl\" | sha256sum --check"
-      register: command_output
-    - debug: 
-        var: command_output.stdout_lines
-    - name: Install kubectl
-      shell: "sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl"
-    - name: Ensure version is up-to-date
-      shell: "kubectl version --client --output=yaml"
-      register: kubectl_yml_version
-    - debug:
-        var: kubectl_yml_version.stdout_lines
-    # install minikube
-    - name : Downloading Minikube package
-      shell: "curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb"
-    - name: Installing Minikube
-      shell: "dpkg -i minikube_latest_amd64.deb"
