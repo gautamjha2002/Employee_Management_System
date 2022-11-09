@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: springboot-crud-k8s
-          image: gautamjha3112002/implementing_devops:0.3
+          image: gautamjha3112002/minor_project_implementing_devops:0.1
           ports:
             - containerPort: 8080
 
