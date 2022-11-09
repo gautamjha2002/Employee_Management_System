@@ -1,6 +1,6 @@
 ---
  - name: Configure the Infrastructure
-   hosts: devops
+   hosts: minor_project
    gather_facts: false
    become: yes
    tasks:
